@@ -8,6 +8,7 @@ export default function AddTaskModal({ onClose, onAddTask }) {
   const [dueDate, setDueDate] = useState("");
   const [checklist, setChecklist] = useState([]);
   const [newChecklistItem, setNewChecklistItem] = useState("");
+  const [columnValue, setColumnValue] = useState("todo");
 
   const handleAddChecklistItem = () => {
     if (newChecklistItem.trim()) {
@@ -18,7 +19,15 @@ export default function AddTaskModal({ onClose, onAddTask }) {
 
   const handleSubmit = () => {
     if (!title.trim()) return alert("Please enter a title");
-    const newTask = { title, description, column, feature, dueDate, checklist };
+    const newTask = { 
+        id: Date.now().toString(), 
+        title, 
+        description, 
+        feature, 
+        checklist, 
+        newChecklistItem,  
+        column: columnValue.toLowerCase().replace(" ", "-") // ✅ normalized
+      }  // normalize, feature, dueDate, checklist };
     onAddTask(newTask);
     onClose();
   };
@@ -55,8 +64,8 @@ export default function AddTaskModal({ onClose, onAddTask }) {
         <div className="mb-3">
           <label className="block text-sm font-medium mb-1">Column</label>
           <select
-            value={column}
-            onChange={(e) => setColumn(e.target.value)}
+               value={columnValue}
+            onChange={(e) => setColumnValue(e.target.value)}
             className="w-full border rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
           >
             <option value="To Do">To Do</option>
