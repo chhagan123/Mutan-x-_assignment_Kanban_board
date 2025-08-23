@@ -9,6 +9,8 @@ export default function AddTaskModal({ onClose, onAddTask }) {
   const [checklist, setChecklist] = useState([]);
   const [newChecklistItem, setNewChecklistItem] = useState("");
   const [columnValue, setColumnValue] = useState("todo");
+//   const  [projectName,setprojectname] = useState [[]];
+
 
   const handleAddChecklistItem = () => {
     if (newChecklistItem.trim()) {

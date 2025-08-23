@@ -1,18 +1,18 @@
+
 import React, { useState, useEffect } from "react";
 import AddTaskModal from "./AddTaskModal";
+import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 
 export default function Board() {
   const [showModal, setShowModal] = useState(false);
   const [tasks, setTasks] = useState([]);
 
-  // ✅ Load tasks from localStorage on mount
+  // Load tasks from localStorage
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
-    console.log(savedTasks)
     if (savedTasks) {
       setTasks(JSON.parse(savedTasks));
     }
-    console.log(tasks.feature)
   }, []);
 
   const handleAddTask = (task) => {
@@ -21,13 +21,23 @@ export default function Board() {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-  // ✅ Helper function to filter tasks per column
-  const getTasksByColumn = (columnName) => {
-    return tasks.filter((task) => task.column === columnName);
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (over && active) {
+      const updatedTasks = tasks.map((task) =>
+        task.title === active.id ? { ...task, column: over.id } : task
+      );
+      setTasks(updatedTasks);
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    }
   };
 
+  const getTasksByColumn = (columnName) =>
+    tasks.filter((task) => task.column === columnName);
+
   return (
-    <div>
+    <DndContext onDragEnd={handleDragEnd}>
       <button
         onClick={() => setShowModal(true)}
         className="px-4 py-2 bg-indigo-600 text-white rounded"
@@ -42,118 +52,66 @@ export default function Board() {
         />
       )}
 
-      {/* ✅ Kanban Columns */}
+      {/* Kanban Columns */}
       <div className="mt-6 grid grid-cols-3 gap-4">
-        {/* Todo Column */}
-        <div className="p-4 bg-gray-100 rounded shadow">
-          <h2 className="font-bold mb-3">📝 Todo</h2>
+        <Column id="todo" title="📝 Todo">
           {getTasksByColumn("todo").map((task, index) => (
-            <div
-              key={index}
-              className="p-3 border rounded-md shadow mb-2 bg-white"
-            >
-              <h3 className="font-semibold">{task.title}</h3>
-              <p className="text-sm text-gray-600">{task.description}</p>
-              <p className="text-xs text-gray-500 mt-1">
-                Feature: {task.feature} | Due: {task.dueDate}
-              </p>
-            </div>
+            <Task key={index} id={task.title} task={task} />
           ))}
-        </div>
+        </Column>
 
-        {/* In Progress Column */}
-        <div className="p-4 bg-gray-100 rounded shadow">
-          <h2 className="font-bold mb-3">⚡ In Progress</h2>
+        <Column id="in-progress" title="⚡ In Progress">
           {getTasksByColumn("in-progress").map((task, index) => (
-            <div
-              key={index}
-              className="p-3 border rounded-md shadow mb-2 bg-white"
-            >
-              <h3 className="font-semibold">{task.title}</h3>
-              <p className="text-sm text-gray-600">{task.description}</p>
-              <p className="text-xs text-gray-500 mt-1">
-                Feature: {task.feature} | Due: {task.dueDate}
-              </p>
-            </div>
+            <Task key={index} id={task.title} task={task} />
           ))}
-        </div>
+        </Column>
 
-        {/* Done Column */}
-        <div className="p-4 bg-gray-100 rounded shadow">
-          <h2 className="font-bold mb-3">✅ Done</h2>
+        <Column id="done" title="✅ Done">
           {getTasksByColumn("done").map((task, index) => (
-            <div
-              key={index}
-              className="p-3 border rounded-md shadow mb-2 bg-white"
-            >
-              <h3 className="font-semibold">{task.title}</h3>
-              <p className="text-sm text-gray-600">{task.description}</p>
-              <p className="text-xs text-gray-500 mt-1">
-                Feature: {task.feature} | Due: {task.dueDate}
-              </p>
-            </div>
+            <Task key={index} id={task.title} task={task} />
           ))}
-        </div>
+        </Column>
       </div>
+    </DndContext>
+  );
+}
+
+/* ----------- Reusable Column Component ----------- */
+function Column({ id, title, children }) {
+  const { setNodeRef } = useDroppable({ id });
+
+  return (
+    <div ref={setNodeRef} className="p-4 bg-gray-100 rounded shadow min-h-[200px]">
+      <h2 className="font-bold mb-3">{title}</h2>
+      {children}
     </div>
   );
 }
-// import React, { useState, useEffect } from "react";
-// import AddTaskModal from "./AddTaskModal";
 
-// export default function Board() {
-//   const [showModal, setShowModal] = useState(false);
-//   const [tasks, setTasks] = useState([]);
+/* ----------- Reusable Task Component ----------- */
+function Task({ id, task }) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id });
 
-//   // ✅ Retrieve tasks from localStorage when component loads
-//   useEffect(() => {
-//     const savedTasks = localStorage.getItem("tasks");
-//     if (savedTasks) {
-//       setTasks(JSON.parse(savedTasks));
-//     }
-   
-//   }, []);
-//   console.log(tasks.feature)
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    opacity: isDragging ? 0.5 : 1,
+  };
 
-//   const handleAddTask = (task) => {
-//     const updatedTasks = [...tasks, task];
-//     setTasks(updatedTasks);
-
-//     // ✅ Save updated tasks in localStorage
-//     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-//   };
-
-//   return (
-//     <div>
-//       <button
-//         onClick={() => setShowModal(true)}
-//         className="px-4 py-2 bg-indigo-600 text-white rounded"
-//       >
-//         + Add Task
-//       </button>
-
-//       {showModal && (
-//         <AddTaskModal
-//           onClose={() => setShowModal(false)}
-//           onAddTask={handleAddTask}
-//         />
-//       )}
-
-//       <div className="mt-4 flex-col">
-//         {tasks.map((task, index) => (
-//           <div
-//             key={index}
-//             className="p-3 border h-auto w-40 flex flex-col rounded-md shadow mb-2 bg-white"
-//           >
-//             <h3 className="font-semibold">{task.title}</h3>
-//             <p className="text-sm text-gray-600">{task.description}</p>
-//             <p className="text-xs text-gray-500 mt-1">
-//               Column: {task.column} | Feature: {task.feature} | Due:{" "}
-//               {task.dueDate}
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className="p-3 border rounded-md shadow mb-2 bg-white cursor-pointer"
+    >
+      <h3 className="font-semibold">{task.title}</h3>
+      <p className="text-sm text-gray-600">{task.description}</p>
+      <p className="text-xs text-gray-500 mt-1">
+        Feature: {task.feature} | Due: {task.dueDate}
+      </p>
+    </div>
+  );
+}
