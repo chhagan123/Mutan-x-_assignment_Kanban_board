@@ -4,7 +4,7 @@ export default function AddTaskModal({ onClose, onAddTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [column, setColumn] = useState("To Do");
-  const [feature, setFeature] = useState("");
+  // const [feature, setFeature] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [checklist, setChecklist] = useState([]);
   const [newChecklistItem, setNewChecklistItem] = useState("");
@@ -25,9 +25,8 @@ export default function AddTaskModal({ onClose, onAddTask }) {
         id: Date.now().toString(), 
         title, 
         description, 
-        feature, 
-        checklist, 
-        newChecklistItem,  
+       
+        
         column: columnValue.toLowerCase().replace(" ", "-") // ✅ normalized
       }  // normalize, feature, dueDate, checklist };
     onAddTask(newTask);
@@ -77,20 +76,7 @@ export default function AddTaskModal({ onClose, onAddTask }) {
         </div>
 
         {/* Feature Selector */}
-        <div className="mb-3">
-          <label className="block text-sm font-medium mb-1">Feature</label>
-          <select
-            value={feature}
-            onChange={(e) => setFeature(e.target.value)}
-            className="w-full border rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="">Select Feature</option>
-            <option value="UI">UI</option>
-            <option value="Backend">Backend</option>
-            <option value="Bug Fix">Bug Fix</option>
-            <option value="Enhancement">Enhancement</option>
-          </select>
-        </div>
+      
 
         {/* Due Date */}
         <div className="mb-3">
