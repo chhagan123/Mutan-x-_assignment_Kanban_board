@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from "react";
 import AddTaskModal from "./AddTaskModal";
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
-
+import Task from "./Task";
 export default function Board() {
   const [showModal, setShowModal] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [todoNum,setTodonum] = useState(0);
 
   // Load tasks from localStorage
   useEffect(() => {
@@ -37,10 +38,12 @@ export default function Board() {
     tasks.filter((task) => task.column === columnName);
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <div className=" mt-40 ">
+       <input className="border ml-20" type="text" placeholder="Search Task"/>
+      <DndContext onDragEnd={handleDragEnd}>
       <button
         onClick={() => setShowModal(true)}
-        className="px-4 py-2 bg-indigo-600 text-white rounded"
+        className="px-4 ml-80 py-2 bg-indigo-600 text-white rounded"
       >
         + Add Task
       </button>
@@ -51,6 +54,9 @@ export default function Board() {
           onAddTask={handleAddTask}
         />
       )}
+     
+
+     
 
       {/* Kanban Columns */}
       <div className="mt-6 grid grid-cols-3 gap-4">
@@ -73,6 +79,11 @@ export default function Board() {
         </Column>
       </div>
     </DndContext>
+    
+    </div>
+
+    
+    
   );
 }
 
@@ -80,38 +91,24 @@ export default function Board() {
 function Column({ id, title, children }) {
   const { setNodeRef } = useDroppable({ id });
 
+  // Count tasks in this column (children length)
+  const taskCount = React.Children.count(children);
+
   return (
-    <div ref={setNodeRef} className="p-4 bg-gray-100 rounded shadow min-h-[200px]">
-      <h2 className="font-bold mb-3">{title}</h2>
+    <div
+      ref={setNodeRef}
+      className="p-4 bg-gray-100 rounded shadow min-h-[200px]"
+    >
+      {/* Column header with count */}
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="font-bold">{title}</h2>
+        <span className="text-sm bg-indigo-600 text-white px-2 py-1 rounded-full">
+          {taskCount}
+        </span>
+      </div>
+
       {children}
     </div>
   );
 }
 
-/* ----------- Reusable Task Component ----------- */
-function Task({ id, task }) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id });
-
-  const style = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className="p-3 border rounded-md shadow mb-2 bg-white cursor-pointer"
-    >
-      <h3 className="font-semibold">{task.title}</h3>
-      <p className="text-sm text-gray-600">{task.description}</p>
-      <p className="text-xs text-gray-500 mt-1">
-        Feature: {task.feature} | Due: {task.dueDate}
-      </p>
-    </div>
-  );
-}
