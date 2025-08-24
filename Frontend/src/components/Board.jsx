@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import AddTaskModal from "./AddTaskModal";
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 import Task from "./Task";
-export default function Board() {
-  const [showModal, setShowModal] = useState(false);
+export default function Board({showModal,setShowModal}) {
+  // const [showModal, setShowModal] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [todoNum,setTodonum] = useState(0);
 
@@ -38,15 +38,17 @@ export default function Board() {
     tasks.filter((task) => task.column === columnName);
 
   return (
-    <div className=" mt-40 ">
-       <input className="border ml-20" type="text" placeholder="Search Task"/>
+    <div >
+
       <DndContext onDragEnd={handleDragEnd}>
-      <button
+    
+      {/* i am doing add task in tollBar.jsx if i want to use i can do then }
+      {/* <button
         onClick={() => setShowModal(true)}
         className="px-4 ml-80 py-2 bg-indigo-600 text-white rounded"
       >
         + Add Task
-      </button>
+      </button> */}
 
       {showModal && (
         <AddTaskModal
