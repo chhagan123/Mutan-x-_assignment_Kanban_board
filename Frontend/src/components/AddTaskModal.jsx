@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 
-export default function AddTaskModal({ onClose, onAddTask }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [column, setColumn] = useState("To Do");
-  // const [feature, setFeature] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [columnValue, setColumnValue] = useState("todo");
-//   const  [projectName,setprojectname] = useState [[]];
+export default function AddTaskModal({ onClose, onAddTask,modalType }) {
+   const [title, setTitle] = useState("");
+   const [description, setDescription] = useState("");
+  //  const  [AssignName,SetAssignName] = useState("")
+   const [dueDate, setDueDate] = useState("");
+  //  const [columnValue, setColumnValue] = useState( modalType);
+  const columnValue = modalType
 
 
-  const handleAddChecklistItem = () => {
-    if (newChecklistItem.trim()) {
-      setChecklist([...checklist, newChecklistItem.trim()]);
-      setNewChecklistItem("");
-    }
-  };
+
+ 
 
   const handleSubmit = () => {
     if (!title.trim()) return alert("Please enter a title");
@@ -23,9 +18,8 @@ export default function AddTaskModal({ onClose, onAddTask }) {
         id: Date.now().toString(), 
         title, 
         description, 
-       
-        
-        column: columnValue.toLowerCase().replace(" ", "-") // ✅ normalized
+        dueDate,
+        column: columnValue || "todo" // ✅ normalized
       }  // normalize, feature, dueDate, checklist };
     onAddTask(newTask);
     onClose();
@@ -60,18 +54,8 @@ export default function AddTaskModal({ onClose, onAddTask }) {
         </div>
 
         {/* Column Selector */}
-        <div className="mb-3">
-          <label className="block text-sm font-medium mb-1">Column</label>
-          <select
-               value={columnValue}
-            onChange={(e) => setColumnValue(e.target.value)}
-            className="w-full border rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="To Do">To Do</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Done">Done</option>
-          </select>
-        </div>
+        <input type="hidden" value={columnValue || ""} readOnly />
+
 
         {/* Feature Selector */}
       
