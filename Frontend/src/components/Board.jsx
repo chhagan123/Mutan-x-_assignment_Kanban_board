@@ -4,25 +4,36 @@ import React from "react";
 import { DndContext } from "@dnd-kit/core";
 import Task from "../BoardMember/Task";
 import Column from "../BoardMember/Colum";
+import { useEffect } from "react";
 
 export default function Board({
   tasks,
   setTasks,
   setShowModal,
   setModalType,
+  handleDelete,
+  onEdit
 }) {
-  // ✅ Handle drag end
+  // // ✅ Handle drag end
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over) return; // dropped outside a column
 
-    // Update the column of the dragged task
+
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === active.id ? { ...task, column: over.id } : task
+        task.id === active.id ?  { ...task, column: over.id } : task
       )
     );
+
+  
   };
+
+  useEffect(() => {
+      const saved = localStorage.getItem("tasks");
+      if (saved) setTasks(JSON.parse(saved));
+    },[]);
+  
 
   // ✅ Group tasks by column
   const getTasksByColumn = (col) => tasks.filter((t) => t.column === col);
@@ -34,7 +45,7 @@ export default function Board({
           {/* TODO Column */}
           <Column id="todo" title="📝 Todo">
             {getTasksByColumn("todo").map((task) => (
-              <Task key={task.id} id={task.id} task={task} />
+              <Task onEdit={onEdit}  handleDelete={handleDelete}  key={task.id} id={task.id} task={task} />
             ))}
             <button
               onClick={() => {
@@ -50,7 +61,7 @@ export default function Board({
           {/* In Progress Column */}
           <Column id="in-progress" title="⚡ In Progress">
             {getTasksByColumn("in-progress").map((task) => (
-              <Task key={task.id} id={task.id} task={task} />
+              <Task onEdit={onEdit} handleDelete={handleDelete} key={task.id} id={task.id} task={task} />
             ))}
             <button
               onClick={() => {
@@ -59,14 +70,14 @@ export default function Board({
               }}
               className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
             >
-              + Add Task
+              + Add Progess
             </button>
           </Column>
 
           {/* Done Column */}
           <Column id="done" title="✅ Done">
             {getTasksByColumn("done").map((task) => (
-              <Task key={task.id} id={task.id} task={task} />
+              <Task onEdit={onEdit} handleDelete={handleDelete} key={task.id} id={task.id} task={task} />
             ))}
             <button
               onClick={() => {
@@ -75,7 +86,7 @@ export default function Board({
               }}
               className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
             >
-              + Add Task
+              + Add Done
             </button>
           </Column>
         </div>

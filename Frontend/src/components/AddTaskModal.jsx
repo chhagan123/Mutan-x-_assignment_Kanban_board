@@ -1,26 +1,24 @@
 import React, { useState } from "react";
+import Column from "../BoardMember/Colum";
 
-export default function AddTaskModal({ onClose, onAddTask,modalType }) {
-   const [title, setTitle] = useState("");
-   const [description, setDescription] = useState("");
-  //  const  [AssignName,SetAssignName] = useState("")
-   const [dueDate, setDueDate] = useState("");
-  //  const [columnValue, setColumnValue] = useState( modalType);
-  const columnValue = modalType
-
-
-
- 
+export default function AddTaskModal({ onClose, onAddTask, modalType }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [AssignName, SetAssignName] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const columnValue = modalType;
 
   const handleSubmit = () => {
     if (!title.trim()) return alert("Please enter a title");
-    const newTask = { 
-        id: Date.now().toString(), 
-        title, 
-        description, 
-        dueDate,
-        column: columnValue || "todo" // ✅ normalized
-      }  // normalize, feature, dueDate, checklist };
+    const newTask = {
+      id: Date.now().toString(),
+      title,
+      description,
+      AssignName,
+      dueDate,
+     
+      column: (columnValue || "todo").toLowerCase().replace(" ", "-"),
+    }; // normalize, feature, dueDate, checklist };
     onAddTask(newTask);
     onClose();
   };
@@ -52,13 +50,23 @@ export default function AddTaskModal({ onClose, onAddTask,modalType }) {
             className="w-full border rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
           />
         </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Assign To
+          </label>
+          <input
+            type="text"
+            value={AssignName}
+            onChange={(e) => SetAssignName(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            placeholder="Enter candidate name"
+          />
+        </div>
 
         {/* Column Selector */}
         <input type="hidden" value={columnValue || ""} readOnly />
 
-
         {/* Feature Selector */}
-      
 
         {/* Due Date */}
         <div className="mb-3">
@@ -70,8 +78,6 @@ export default function AddTaskModal({ onClose, onAddTask,modalType }) {
             className="w-full border rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
           />
         </div>
-
-     
 
         {/* Buttons */}
         <div className="flex justify-end gap-2 mt-4">
