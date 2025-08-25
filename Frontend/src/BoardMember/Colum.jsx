@@ -21,7 +21,7 @@ function Column({ id, title, children }) {
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col bg-white rounded-xl shadow-md min-h-[300px] overflow-hidden"
+      className="flex flex-col border bg-white rounded-xl shadow-md min-h-[500px] overflow-hidden"
     >
       {/* Column header */}
       <div

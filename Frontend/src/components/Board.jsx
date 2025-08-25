@@ -41,10 +41,10 @@ function Board({
   return (
     <DndContext onDragEnd={handleDragEnd}>
       {/* ✅ Centered Scrollable Container */}
-      <div className="mt-6 flex  justify-center ">
-        <div className="flex gap-4 overflow-x-auto  max-w-5xl px-4">
+      <div className="mt-6 flex  ">
+        <div className="flex gap-4 overflow-x-auto  max-w-7xl ">
           {columns.map((col) => (
-            <div key={col.id} className="w-64 flex-shrink-0">
+            <div key={col.id} className="w-85  flex-shrink-0">
               <Column id={col.id} title={col.title}>
                 {getTasksByColumn(col.id).map((task) => (
                   <Task

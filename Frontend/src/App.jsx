@@ -1,6 +1,6 @@
 
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import React from "react";
 import "./App.css";
 import "./index.css";
@@ -17,6 +17,14 @@ function App() {
   const [editTask, setEditTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddColumn, setShowAddColumn] = useState(false);
+  const [Theme,setTheme] = useState(true);
+  
+  
+  // set theme of backfound color 
+
+    const handleTheme = () => {
+      setTheme(!Theme)
+    };
 
   //  Load tasks directly from localStorage OR empty
   const [tasks, setTasks] = useState(() => {
@@ -68,9 +76,9 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center">
+    <div className="w-screen h-screen flex flex-col mt-10  mb-10 items-center ">
       {/* Title */}
-      <h1 className="text-shadow-black text-3xl mb-30">
+      <h1 className="text-shadow-black text-3xl mb-10">
         Welcome To Kanban Board
       </h1>
 
@@ -83,10 +91,14 @@ function App() {
         setSearchTerm={setSearchTerm}
         setShowAddColumn={setShowAddColumn}
         showAddColumn={showAddColumn}
+        setTheme={setTheme}
+        Theme = {Theme}
+      handleTheme={handleTheme}
       />
 
       {/* Board with Drag & Drop */}
       <Board
+      className="mb-10 pb-10"
         tasks={tasks}
         setTasks={setTasks}
         showModal={showModal}
