@@ -1,4 +1,153 @@
-import { useState } from "react";
+// import { useState } from "react";
+// import React from "react";
+// import "./App.css";
+// import "./index.css";
+
+// import Board from "./components/Board";
+// import Toolbar from "./components/ToolBar";
+// import AddTaskModal from "./components/AddTaskModal";
+// import { useEffect } from "react";
+// import EditTaskModal from "./components/EditTaskModal";
+// import { AddColumn } from "./components/AddColumn";
+
+// function App() {
+//   const [tasks, setTasks] = useState([]);
+//   const [modalType, setModalType] = useState(null); // Which column/task type modal relates to
+//   const [showModal, setShowModal] = useState(false);
+//   const [editTask, setEditTask] = useState(null);
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [showAddColumn, setShowAddColumn] = useState(false);
+//   // ✅ Manage columns state (load from localStorage or default)
+
+//   const [columns, setColumns] = useState(() => {
+//     const saved = localStorage.getItem("columns");
+//     return saved 
+//       ? JSON.parse(saved) 
+//       : [
+//           { id: "todo", title: "Todo" },
+//           { id: "in-progress", title: "In Progress" },
+//           { id: "done", title: "Done" },
+//         ];
+//   });
+//   useEffect(() => {
+//     const saved = localStorage.getItem("tasks");
+//     if (saved) setTasks(JSON.parse(saved));
+//   }, []);
+
+
+
+// useEffect(() => {
+//   localStorage.setItem("columns",JSON.stringify(columns))
+// },[columns])
+
+
+
+// useEffect(() => {
+//   localStorage.setItem("tasks", JSON.stringify(tasks));
+// }, [tasks]);
+  
+
+//   const handleAddTask = (task) => {
+//     const updatedTasks = [...tasks, task];
+//     setTasks(updatedTasks);
+//     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+//   };
+
+//   //
+//   const handleDelete = (id) => {
+//     const updatedTasks = tasks.filter((task) => task.id !== id);
+
+//     setTasks(updatedTasks);
+//     localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // overwrite localStorage
+//   };
+
+//   const handleSaveEdit = (updatedTask) => {
+//     setTasks((prev) => {
+//       const updatedTasks = prev.map((task) =>
+//         task.id === updatedTask.id ? updatedTask : task
+//       );
+
+//       // Save to localStorage after updating
+//       localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+//       return updatedTasks;
+//     });
+
+//     setEditTask(null); // close modal
+//   };
+
+//   // 3. add Column function 
+//   const addColumn = (newcolumn) => {
+//     setColumns([...columns,newcolumn])
+//   }
+
+
+//   return (
+//     <div className="w-screen h-screen flex flex-col items-center justify-center">
+//       {/* Title */}
+//       <h1 className="text-shadow-black text-3xl mb-4">
+//         Welcome To Kanban Board
+//       </h1>
+
+//       {/* Toolbar */}
+//       <Toolbar
+//         showModal={showModal}
+//         setShowModal={setShowModal}
+//         setModalType={setModalType}
+//         searchTerm={searchTerm}
+//         setSearchTerm={setSearchTerm}
+//         setShowAddColumn={setShowAddColumn}
+//         showAddColumn={showAddColumn}
+//       />
+
+//       {/* Board with Drag & Drop */}
+//       <Board
+//         tasks={tasks}
+//         setTasks={setTasks}
+//         showModal={showModal}
+//         setShowModal={setShowModal}
+//         modalType={modalType}
+//         setModalType={setModalType}
+//         handleDelete={handleDelete}
+//         onEdit={setEditTask}
+//         searchTerm={searchTerm}
+//         setSearchTerm={setSearchTerm}
+//         columns={columns} // ✅ pass columns
+//         setColumns={setColumns}
+//         setShowAddColumn={showAddColumn}
+//       />
+
+//       {/* Add Task Modal */}
+//       {showModal && (
+//         <AddTaskModal
+//           modalType={modalType}
+//           onClose={() => setShowModal(false)}
+//           onAddTask={handleAddTask}
+//         />
+//       )}
+//       {editTask && (
+//         <EditTaskModal
+//           task={editTask}
+//           onSave={handleSaveEdit}
+//           onClose={() => setEditTask(null)}
+//         />
+//       )}
+//        {showAddColumn && (
+//         <AddColumn
+//           onClose={() => setShowAddColumn(false)}
+//           onSave={(col) => {
+//             addColumn(col);
+//             setShowAddColumn(false);
+//           }}
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import { useState, useEffect } from "react";
 import React from "react";
 import "./App.css";
 import "./index.css";
@@ -6,77 +155,64 @@ import "./index.css";
 import Board from "./components/Board";
 import Toolbar from "./components/ToolBar";
 import AddTaskModal from "./components/AddTaskModal";
-import { useEffect } from "react";
 import EditTaskModal from "./components/EditTaskModal";
 import { AddColumn } from "./components/AddColumn";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [modalType, setModalType] = useState(null); // Which column/task type modal relates to
+  const [modalType, setModalType] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddColumn, setShowAddColumn] = useState(false);
-  // ✅ Manage columns state (load from localStorage or default)
-const [columns, setColumns] = useState(() => {
-  const saved = localStorage.getItem("columns");
-  return saved 
-    ? JSON.parse(saved) 
-    : [
-        { id: "todo", title: "Todo" },
-        { id: "in-progress", title: "In Progress" },
-        { id: "done", title: "Done" },
-      ];
-});
 
-useEffect(() => {
-  localStorage.setItem("columns",JSON.stringify(columns))
-},[columns])
-
-useEffect(() => {
-
-})
-
-
-  useEffect(() => {
+  // ✅ Load tasks directly from localStorage OR empty
+  const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
-    if (saved) setTasks(JSON.parse(saved));
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
 
+  // ✅ Load columns directly from localStorage OR default
+  const [columns, setColumns] = useState(() => {
+    const saved = localStorage.getItem("columns");
+    return saved
+      ? JSON.parse(saved)
+      : [
+          { id: "todo", title: "Todo" },
+          { id: "in-progress", title: "In Progress" },
+          { id: "done", title: "Done" },
+        ];
+  });
+
+  // ✅ Persist tasks whenever they change
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  // ✅ Persist columns whenever they change
+  useEffect(() => {
+    localStorage.setItem("columns", JSON.stringify(columns));
+  }, [columns]);
+
+  // --- Task Functions ---
   const handleAddTask = (task) => {
-    const updatedTasks = [...tasks, task];
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setTasks((prev) => [...prev, task]);
   };
 
-  //
   const handleDelete = (id) => {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // overwrite localStorage
+    setTasks((prev) => prev.filter((task) => task.id !== id));
   };
 
   const handleSaveEdit = (updatedTask) => {
-    setTasks((prev) => {
-      const updatedTasks = prev.map((task) =>
-        task.id === updatedTask.id ? updatedTask : task
-      );
-
-      // Save to localStorage after updating
-      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-
-      return updatedTasks;
-    });
-
-    setEditTask(null); // close modal
+    setTasks((prev) =>
+      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+    setEditTask(null);
   };
 
-  // 3. add Column function 
-  const addColumn = (newcolumn) => {
-    setColumns([...columns,newcolumn])
-  }
-
+  // --- Column Function ---
+  const addColumn = (newColumn) => {
+    setColumns((prev) => [...prev, newColumn]);
+  };
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
@@ -108,7 +244,7 @@ useEffect(() => {
         onEdit={setEditTask}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        columns={columns} // ✅ pass columns
+        columns={columns}
         setColumns={setColumns}
         setShowAddColumn={showAddColumn}
       />
@@ -121,6 +257,8 @@ useEffect(() => {
           onAddTask={handleAddTask}
         />
       )}
+
+      {/* Edit Task Modal */}
       {editTask && (
         <EditTaskModal
           task={editTask}
@@ -128,7 +266,9 @@ useEffect(() => {
           onClose={() => setEditTask(null)}
         />
       )}
-       {showAddColumn && (
+
+      {/* Add Column Modal */}
+      {showAddColumn && (
         <AddColumn
           onClose={() => setShowAddColumn(false)}
           onSave={(col) => {

@@ -3,8 +3,11 @@ import { useDraggable } from "@dnd-kit/core";
 import { Edit, Trash2, User, Calendar } from "lucide-react"; // ✅ icon set
 
 function Task({ id, task ,handleDelete,onEdit}) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id });
+  // const { attributes, listeners, setNodeRef, transform, isDragging } =
+  //   useDraggable({ id });
+  const { attributes, listeners, setNodeRef, transform ,isDragging } = useDraggable({
+    id: task.id,
+  });
 
   const style = {
     transform: transform
