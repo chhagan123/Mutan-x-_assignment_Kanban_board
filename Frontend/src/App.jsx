@@ -70,7 +70,7 @@ function App() {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
       {/* Title */}
-      <h1 className="text-shadow-black text-3xl mb-4">
+      <h1 className="text-shadow-black text-3xl mb-30">
         Welcome To Kanban Board
       </h1>
 

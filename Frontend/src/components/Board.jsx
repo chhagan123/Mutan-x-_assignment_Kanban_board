@@ -1,13 +1,9 @@
-
-
 import React from "react";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Task from "../BoardMember/Task";
 import Column from "../BoardMember/Colum";
-import { useEffect } from "react";
-import { useState } from "react";
 
- function Board({
+function Board({
   tasks,
   setTasks,
   setShowModal,
@@ -15,73 +11,68 @@ import { useState } from "react";
   handleDelete,
   onEdit,
   setSearchTerm,
-   searchTerm,
-   columns
-})
-
-
-  
-  // ✅ Handle drag end
-  {
+  searchTerm,
+  columns,
+}) {
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    if (!over) return; // dropped outside a column
-
+    if (!over) return;
 
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === active.id ?  { ...task, column: over.id } : task
+        task.id === active.id ? { ...task, column: over.id } : task
       )
     );
+  };
 
-  }
-  
-  
- 
+  const [activeTask, setActiveTask] = React.useState(null);
 
   const getTasksByColumn = (col) =>
     tasks
       .filter((t) => {
         const search = searchTerm.toLowerCase();
         return (
-          t.title.toLowerCase().includes(search) || 
-          (t.AssignName && t.AssignName.toLowerCase().includes(search)) // ✅ check AssignName too
+          t.title.toLowerCase().includes(search) ||
+          (t.AssignName && t.AssignName.toLowerCase().includes(search))
         );
       })
       .filter((t) => t.column === col);
-  
-  return (
-    <div>
-      <DndContext onDragEnd={handleDragEnd}>
-        {/* ✅ Dynamic grid */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {columns.map((col) => (
-            <Column key={col.id} id={col.id} title={col.title}>
-              {getTasksByColumn(col.id).map((task) => (
-                <Task
-                  onEdit={onEdit}
-                  handleDelete={handleDelete}
-                  key={task.id}
-                  id={task.id}
-                  task={task}
-                />
-              ))}
 
-              <button
-                onClick={() => {
-                  setModalType(col.id);
-                  setShowModal(true);
-                }}
-                className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-              >
-                + Add {col.title}
-              </button>
-            </Column>
+  return (
+    <DndContext onDragEnd={handleDragEnd}>
+      {/* ✅ Centered Scrollable Container */}
+      <div className="mt-6 flex  justify-center ">
+        <div className="flex gap-4 overflow-x-auto  max-w-5xl px-4">
+          {columns.map((col) => (
+            <div key={col.id} className="w-64 flex-shrink-0">
+              <Column id={col.id} title={col.title}>
+                {getTasksByColumn(col.id).map((task) => (
+                  <Task
+                    onEdit={onEdit}
+                    handleDelete={handleDelete}
+                    key={task.id}
+                    id={task.id}
+                    task={task}
+                  />
+                ))}
+
+                {/* Add new task button */}
+                <button
+                  onClick={() => {
+                    setModalType(col.id);
+                    setShowModal(true);
+                  }}
+                  className="w-full mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                >
+                  + Add {col.title}
+                </button>
+              </Column>
+            </div>
           ))}
         </div>
-      </DndContext>
-    </div>
+      </div>
+    </DndContext>
   );
 }
 
-export default Board
+export default Board;
