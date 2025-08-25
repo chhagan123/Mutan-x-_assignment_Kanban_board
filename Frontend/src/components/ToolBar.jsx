@@ -3,16 +3,16 @@ import { useState,useEffect } from "react";
 import { Search, Plus, RotateCcw, RotateCw, Sun, User, Target,Moon } from "lucide-react";
 
 export default function Toolbar({setShowModal,searchTerm,setSearchTerm,
-  setShowAddColumn,  showAddColumn , setTheme,Theme,handleTheme
+  setShowAddColumn,  showAddColumn , setTheme,Theme,handleTheme,Themo,handleUndo ,  handleRedo
 }) {
 
   useEffect(() => {
-    document.body.style.backgroundColor = Theme ? "#0f172a" : "#f8fafc"; 
-    document.body.style.color = Theme ? "white" : "black";
+    document.body.style.backgroundColor = Theme  ? "#0f172a":"#f8fafc"  ; 
+    // document.body.style.color = Theme ? "white" : "black";
   }, [Theme]);
   
 return (
-    <div className="flex flex-wrap items-center max-w-8xl gap-4 p-2 border border-yellow rounded-lg bg-white">
+    <div className="flex flex-wrap items-center max-w-8xl gap-4 p-2 border border-red-600 rounded-lg bg-white">
       {/* Search */}
       <div className="flex items-center border rounded-lg px-2 w-full sm:w-115">
         <input
@@ -21,7 +21,7 @@ return (
            value={searchTerm}
            onChange={(e) => setSearchTerm(e.target.value)}
          
-          className="w-full p-1 outline-none bg-transparent text-sm"
+          className="w-full border-black text-gray p-1 outline-none text-black bg-transparent text-sm"
         />
         <Search size={16} className="text-gray-500" />
       </div>
@@ -40,18 +40,19 @@ return (
       </button>
 
       {/* Undo */}
-      <button className="flex items-center gap-1 border rounded-lg px-3 py-1 text-sm hover:bg-gray-100">
+      <button onClick={handleUndo} className="flex items-center gap-1 border rounded-lg px-3 py-1 text-sm text-black hover:bg-gray-100">
         <RotateCcw size={16} /> Undo
       </button>
 
       {/* Redo */}
-      <button className="flex items-center gap-1 border rounded-lg px-3 py-1 text-sm hover:bg-gray-100">
+      <button onClick={handleRedo} className="flex items-center gap-1 border rounded-lg px-3 text-black py-1 text-sm hover:bg-gray-100">
         <RotateCw size={16} /> Redo
       </button>
 
       {/* Theme */}
-      <button onClick={handleTheme} className="flex items-center gap-1 border rounded-lg px-3 py-1 text-sm hover:bg-gray-100">
-        {Theme ?     <Sun size={16} /> : <Moon /> }
+      <button onClick={handleTheme} className={`flex items-center  gap-1 border rounded-lg px-3 py-1 text-sm`}
+      >
+        {Theme ?     <Moon className="bg-black" />: <Sun size={16} />  }
       </button>
     </div>
   );

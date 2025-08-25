@@ -35,7 +35,7 @@ function EditTaskModal({ task, onSave, onClose }) {
   if (!task) return null; // don't render if no task selected
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center text-black bg-black/50 bg-blur">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-5 rounded-md shadow-md w-80"

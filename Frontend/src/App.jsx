@@ -1,6 +1,5 @@
 
-
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import "./App.css";
 import "./index.css";
@@ -17,22 +16,22 @@ function App() {
   const [editTask, setEditTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddColumn, setShowAddColumn] = useState(false);
-  const [Theme,setTheme] = useState(true);
-  
-  
-  // set theme of backfound color 
+  const [Theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("Theme");
+    return savedTheme ? JSON.parse(savedTheme) : false;
+  });
 
-    const handleTheme = () => {
-      setTheme(!Theme)
-    };
+  // --- Undo/Redo State ---
+  const [history, setHistory] = useState([]);
+  const [future, setFuture] = useState([]);
 
-  //  Load tasks directly from localStorage OR empty
+  // --- Tasks ---
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [];
   });
 
-  //  Load columns directly from localStorage OR default
+  // --- Columns ---
   const [columns, setColumns] = useState(() => {
     const saved = localStorage.getItem("columns");
     return saved
@@ -44,43 +43,86 @@ function App() {
         ];
   });
 
-  //  Persist tasks whenever they change
+  // Persist tasks
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  //  Persist columns whenever they change
+  // Persist columns
   useEffect(() => {
     localStorage.setItem("columns", JSON.stringify(columns));
   }, [columns]);
 
+  // Persist theme
+  useEffect(() => {
+    localStorage.setItem("Theme", JSON.stringify(Theme));
+    document.body.style.backgroundColor = Theme ? "#0f172a" : "#f8fafc";
+    document.body.style.color = Theme ? "white" : "black";
+  }, [Theme]);
+
+  // --- History Update Function ---
+  const updateBoardState = (newTasks, newColumns) => {
+    setHistory([...history, { tasks, columns }]); // Save current state
+    setTasks(newTasks);
+    setColumns(newColumns);
+    setFuture([]); // Clear redo stack
+  };
+
+  // --- Undo ---
+  const handleUndo = () => {
+    if (history.length === 0) return;
+    const previous = history[history.length - 1];
+    setFuture([{ tasks, columns }, ...future]);
+    setTasks(previous.tasks);
+    setColumns(previous.columns);
+    setHistory(history.slice(0, history.length - 1));
+  };
+
+  // --- Redo ---
+  const handleRedo = () => {
+    if (future.length === 0) return;
+    const next = future[0];
+    setHistory([...history, { tasks, columns }]);
+    setTasks(next.tasks);
+    setColumns(next.columns);
+    setFuture(future.slice(1));
+  };
+
   // --- Task Functions ---
   const handleAddTask = (task) => {
-    setTasks((prev) => [...prev, task]);
+    updateBoardState([...tasks, task], columns);
   };
 
   const handleDelete = (id) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    updateBoardState(tasks.filter((task) => task.id !== id), columns);
   };
 
   const handleSaveEdit = (updatedTask) => {
-    setTasks((prev) =>
-      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    updateBoardState(
+      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
+      columns
     );
     setEditTask(null);
   };
 
   // --- Column Function ---
   const addColumn = (newColumn) => {
-    setColumns((prev) => [...prev, newColumn]);
+    updateBoardState(tasks, [...columns, newColumn]);
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col mt-10  mb-10 items-center ">
+    <div className="w-screen h-screen flex flex-col mt-10 mb-10 items-center">
       {/* Title */}
-      <h1 className="text-shadow-black text-3xl mb-10">
+      <h1
+        className={`${
+          Theme ? "text-white" : "text-black"
+        } text-3xl mb-6 font-bold`}
+      >
         Welcome To Kanban Board
       </h1>
+
+      {/* Undo / Redo Buttons */}
+      
 
       {/* Toolbar */}
       <Toolbar
@@ -92,15 +134,17 @@ function App() {
         setShowAddColumn={setShowAddColumn}
         showAddColumn={showAddColumn}
         setTheme={setTheme}
-        Theme = {Theme}
-      handleTheme={handleTheme}
+        Theme={Theme}
+        handleTheme={() => setTheme(!Theme)}
+        handleRedo = {handleRedo}
+        handleUndo = {handleUndo}
       />
 
-      {/* Board with Drag & Drop */}
+      {/* Board */}
       <Board
-      className="mb-10 pb-10"
+        className="mb-10 pb-10"
         tasks={tasks}
-        setTasks={setTasks}
+        setTasks={(newTasks) => updateBoardState(newTasks, columns)}
         showModal={showModal}
         setShowModal={setShowModal}
         modalType={modalType}
@@ -110,7 +154,7 @@ function App() {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         columns={columns}
-        setColumns={setColumns}
+        setColumns={(newColumns) => updateBoardState(tasks, newColumns)}
         setShowAddColumn={showAddColumn}
       />
 
