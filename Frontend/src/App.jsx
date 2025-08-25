@@ -14,6 +14,7 @@ function App() {
   const [modalType, setModalType] = useState(null); // Which column/task type modal relates to
   const [showModal, setShowModal] = useState(false);
   const [editTask,setEditTask] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("");
 
 
   useEffect(() => {
@@ -63,6 +64,8 @@ function App() {
         showModal={showModal} 
         setShowModal={setShowModal} 
         setModalType={setModalType}
+        searchTerm = {searchTerm}
+        setSearchTerm={setSearchTerm}
       />
 
       {/* Board with Drag & Drop */}
@@ -75,6 +78,8 @@ function App() {
         setModalType={setModalType}
         handleDelete={handleDelete}
         onEdit={setEditTask} 
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
 
       {/* Add Task Modal */}

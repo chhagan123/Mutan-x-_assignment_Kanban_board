@@ -5,16 +5,23 @@ import { DndContext } from "@dnd-kit/core";
 import Task from "../BoardMember/Task";
 import Column from "../BoardMember/Colum";
 import { useEffect } from "react";
+import { useState } from "react";
 
-export default function Board({
+ function Board({
   tasks,
   setTasks,
   setShowModal,
   setModalType,
   handleDelete,
-  onEdit
-}) {
-  // // ✅ Handle drag end
+  onEdit,
+  setSearchTerm,
+   searchTerm
+})
+
+
+  
+  // ✅ Handle drag end
+  {
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over) return; // dropped outside a column
@@ -26,17 +33,26 @@ export default function Board({
       )
     );
 
+  }
   
-  };
+  
+ 
 
-  useEffect(() => {
-      const saved = localStorage.getItem("tasks");
-      if (saved) setTasks(JSON.parse(saved));
-    },[]);
+  const getTasksByColumn = (col) =>
+    tasks
+      .filter((t) => {
+        const search = searchTerm.toLowerCase();
+        return (
+          t.title.toLowerCase().includes(search) || 
+          (t.AssignName && t.AssignName.toLowerCase().includes(search)) // ✅ check AssignName too
+        );
+      })
+      .filter((t) => t.column === col);
   
+
 
   // ✅ Group tasks by column
-  const getTasksByColumn = (col) => tasks.filter((t) => t.column === col);
+  // const getTasksByColumn = (col) => tasks.filter((t) => t.column === col);
 
   return (
     <div>
@@ -94,3 +110,5 @@ export default function Board({
     </div>
   );
 }
+
+export default Board
