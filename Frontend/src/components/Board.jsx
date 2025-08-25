@@ -15,7 +15,8 @@ import { useState } from "react";
   handleDelete,
   onEdit,
   setSearchTerm,
-   searchTerm
+   searchTerm,
+   columns
 })
 
 
@@ -54,57 +55,89 @@ import { useState } from "react";
   // ✅ Group tasks by column
   // const getTasksByColumn = (col) => tasks.filter((t) => t.column === col);
 
+  // return (
+  //   <div>
+  //     <DndContext onDragEnd={handleDragEnd}>
+  //       <div className="mt-6 grid grid-cols-3 gap-4">
+  //         {/* TODO Column */}
+  //         <Column id="todo" title="📝 Todo">
+  //           {getTasksByColumn("todo").map((task) => (
+  //             <Task onEdit={onEdit}  handleDelete={handleDelete}  key={task.id} id={task.id} task={task} />
+  //           ))}
+  //           <button
+  //             onClick={() => {
+  //               setModalType("todo");
+  //               setShowModal(true);
+  //             }}
+  //             className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+  //           >
+  //             + Add Task
+  //           </button>
+  //         </Column>
+
+  //         {/* In Progress Column */}
+  //         <Column id="in-progress" title="⚡ In Progress">
+  //           {getTasksByColumn("in-progress").map((task) => (
+  //             <Task onEdit={onEdit} handleDelete={handleDelete} key={task.id} id={task.id} task={task} />
+  //           ))}
+  //           <button
+  //             onClick={() => {
+  //               setModalType("in-progress");
+  //               setShowModal(true);
+  //             }}
+  //             className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+  //           >
+  //             + Add Progess
+  //           </button>
+  //         </Column>
+
+  //         {/* Done Column */}
+  //         <Column id="done" title="✅ Done">
+  //           {getTasksByColumn("done").map((task) => (
+  //             <Task onEdit={onEdit} handleDelete={handleDelete} key={task.id} id={task.id} task={task} />
+  //           ))}
+  //           <button
+  //             onClick={() => {
+  //               setModalType("done");
+  //               setShowModal(true);
+  //             }}
+  //             className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+  //           >
+  //             + Add Done
+  //           </button>
+  //         </Column>
+  //       </div>
+  //     </DndContext>
+  //   </div>
+  // );
   return (
     <div>
       <DndContext onDragEnd={handleDragEnd}>
-        <div className="mt-6 grid grid-cols-3 gap-4">
-          {/* TODO Column */}
-          <Column id="todo" title="📝 Todo">
-            {getTasksByColumn("todo").map((task) => (
-              <Task onEdit={onEdit}  handleDelete={handleDelete}  key={task.id} id={task.id} task={task} />
-            ))}
-            <button
-              onClick={() => {
-                setModalType("todo");
-                setShowModal(true);
-              }}
-              className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              + Add Task
-            </button>
-          </Column>
+        {/* ✅ Dynamic grid */}
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {columns.map((col) => (
+            <Column key={col.id} id={col.id} title={col.title}>
+              {getTasksByColumn(col.id).map((task) => (
+                <Task
+                  onEdit={onEdit}
+                  handleDelete={handleDelete}
+                  key={task.id}
+                  id={task.id}
+                  task={task}
+                />
+              ))}
 
-          {/* In Progress Column */}
-          <Column id="in-progress" title="⚡ In Progress">
-            {getTasksByColumn("in-progress").map((task) => (
-              <Task onEdit={onEdit} handleDelete={handleDelete} key={task.id} id={task.id} task={task} />
-            ))}
-            <button
-              onClick={() => {
-                setModalType("in-progress");
-                setShowModal(true);
-              }}
-              className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              + Add Progess
-            </button>
-          </Column>
-
-          {/* Done Column */}
-          <Column id="done" title="✅ Done">
-            {getTasksByColumn("done").map((task) => (
-              <Task onEdit={onEdit} handleDelete={handleDelete} key={task.id} id={task.id} task={task} />
-            ))}
-            <button
-              onClick={() => {
-                setModalType("done");
-                setShowModal(true);
-              }}
-              className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              + Add Done
-            </button>
-          </Column>
+              <button
+                onClick={() => {
+                  setModalType(col.id);
+                  setShowModal(true);
+                }}
+                className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+              >
+                + Add {col.title}
+              </button>
+            </Column>
+          ))}
         </div>
       </DndContext>
     </div>

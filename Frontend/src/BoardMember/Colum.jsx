@@ -17,9 +17,9 @@ function Column({ id, title, children }) {
       {/* Column header with count */}
       <div className="flex justify-between items-center mb-3">
         <h2 className="font-bold">{title}</h2>
-        <span className="text-sm bg-indigo-600 text-white px-2 py-1 rounded-full">
-          {taskCount-1}
-        </span>
+        <span className="text-sm bg-green-600 text-white px-2 py-1 rounded-full">
+  {taskCount - 1}
+</span>
       </div>
 
       {children}

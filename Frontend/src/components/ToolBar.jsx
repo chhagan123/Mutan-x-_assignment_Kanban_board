@@ -2,7 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { Search, Plus, RotateCcw, RotateCw, Sun, User, Target } from "lucide-react";
 
-export default function Toolbar({setShowModal,searchTerm,setSearchTerm}) {
+export default function Toolbar({setShowModal,searchTerm,setSearchTerm,
+  setShowAddColumn,  showAddColumn
+}) {
   
 
   
@@ -34,7 +36,7 @@ export default function Toolbar({setShowModal,searchTerm,setSearchTerm}) {
       </button>
 
       {/* Add Column */}
-      <button className="flex items-center gap-1 border rounded-lg px-3 py-1 text-sm hover:bg-gray-100">
+      <button onClick={() => setShowAddColumn(true)} className="flex items-center gap-1 border rounded-lg px-3 py-1 text-sm hover:bg-gray-100">
         <Plus size={16} /> Add New Column
       </button>
 
