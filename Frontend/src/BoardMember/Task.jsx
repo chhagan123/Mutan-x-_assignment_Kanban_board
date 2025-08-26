@@ -57,9 +57,9 @@ function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
               setShowDelete(true)
              
             }}
-            className="p-1 rounded hover:bg-red-100 transition"
+            className="p-1 "
           >
-            <Trash2 size={16} className="text-red-600" />
+            <Trash2 size={16} className="text-red-500" />
           </button>
         </div>
       </div>
@@ -91,4 +91,3 @@ function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
 }
 
 export default Task;
-

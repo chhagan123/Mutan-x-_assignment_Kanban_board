@@ -16,8 +16,9 @@ function Column({ id, title, children,Theme }) {
     "new one": "bg-purple-500",
   };
 
-  return (
-    <div
+  return <>
+  
+     <div
       ref={setNodeRef}
       className={`flex flex-col 
                  hover:shadow-xl rounded-5xl hover:scale-[0.97] transition-all duration-300  
@@ -26,7 +27,7 @@ function Column({ id, title, children,Theme }) {
                   : "bg-white border border-gray-300 text-black"}
               
                  rounded-xl shadow-md 
-                 min-h-[500px] w-[300px] flex-shrink-0`} // 👈 fixed width for slider
+                 min-h-[400px] w-auto flex-shrink-0`} // 👈 fixed width for slider
     >
       {/* Column header */}
       <div
@@ -38,14 +39,21 @@ function Column({ id, title, children,Theme }) {
         <span className="text-sm bg-white/20 px-2 py-0.5 rounded-full">
           {taskCount - 1}
         </span>
+       
       </div>
+      
 
       {/* Tasks */}
       <div className="flex-1 p-3 space-y-3 overflow-y-auto">
         {children}
       </div>
+     
     </div>
-  );
+  
+ 
+
+   
+    </>
 }
 
 export default Column;

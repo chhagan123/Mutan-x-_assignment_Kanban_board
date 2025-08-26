@@ -119,17 +119,18 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col mt-10 mb-10 items-center">
+    <div className="h-full w-full flex flex-col 
+    md:pl-20 md:pr-20 md:mt-10 md:mb-10">
       {/* Title */}
       <h1
         className={`${
           Theme ? "text-white" : "text-black"
-        } text-3xl mb-6 font-bold`}
+        } text-2xl mb-6 font-bold`}
       >
         Welcome To Kanban Board
       </h1>
 
-      {/* Undo / Redo Buttons */}
+     
 
       {/* Toolbar */}
       <Toolbar
@@ -146,7 +147,7 @@ function App() {
         handleRedo={handleRedo}
         handleUndo={handleUndo}
       />
-
+      
       {/* Board */}
       <Board
         className="mb-10 pb-10"
@@ -182,6 +183,7 @@ function App() {
       {editTask && (
         <EditTaskModal
           task={editTask}
+          Theme={Theme}
           onSave={handleSaveEdit}
           onClose={() => setEditTask(null)}
         />
