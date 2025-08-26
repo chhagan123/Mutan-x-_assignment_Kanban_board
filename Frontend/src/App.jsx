@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import React from "react";
 import "./App.css";
@@ -9,11 +8,15 @@ import Toolbar from "./components/ToolBar";
 import AddTaskModal from "./components/AddTaskModal";
 import EditTaskModal from "./components/EditTaskModal";
 import { AddColumn } from "./components/AddColumn";
+import { DeleteTaskModal } from "./components/DeleteTask";
 
 function App() {
   const [modalType, setModalType] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editTask, setEditTask] = useState(null);
+  const [showDelete, setShowDelete] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddColumn, setShowAddColumn] = useState(false);
   const [Theme, setTheme] = useState(() => {
@@ -94,8 +97,13 @@ function App() {
   };
 
   const handleDelete = (id) => {
-    updateBoardState(tasks.filter((task) => task.id !== id), columns);
+    console.log("nothing");
+    updateBoardState(
+      tasks.filter((task) => task.id !== id),
+      columns
+    );
   };
+ 
 
   const handleSaveEdit = (updatedTask) => {
     updateBoardState(
@@ -122,7 +130,6 @@ function App() {
       </h1>
 
       {/* Undo / Redo Buttons */}
-      
 
       {/* Toolbar */}
       <Toolbar
@@ -136,8 +143,8 @@ function App() {
         setTheme={setTheme}
         Theme={Theme}
         handleTheme={() => setTheme(!Theme)}
-        handleRedo = {handleRedo}
-        handleUndo = {handleUndo}
+        handleRedo={handleRedo}
+        handleUndo={handleUndo}
       />
 
       {/* Board */}
@@ -156,6 +163,8 @@ function App() {
         columns={columns}
         setColumns={(newColumns) => updateBoardState(tasks, newColumns)}
         setShowAddColumn={showAddColumn}
+        setShowDelete={setShowDelete}
+        setTaskToDelete={setTaskToDelete}
       />
 
       {/* Add Task Modal */}
@@ -175,6 +184,20 @@ function App() {
           onClose={() => setEditTask(null)}
         />
       )}
+     {showDelete && taskToDelete && (
+  <DeleteTaskModal
+    task={taskToDelete} // 👈 pass single task, not array
+    onDelete={(id) => {
+      handleDelete(id);
+      setShowDelete(false); // close modal
+      setTaskToDelete(null); // reset
+    }}
+    onCancel={() => {
+      setShowDelete(false);
+      setTaskToDelete(null);
+    }}
+  />
+)}
 
       {/* Add Column Modal */}
       {showAddColumn && (

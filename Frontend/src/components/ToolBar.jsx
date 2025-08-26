@@ -5,10 +5,12 @@ import { Search, Plus, RotateCcw, RotateCw, Sun, User, Target,Moon } from "lucid
 export default function Toolbar({setShowModal,searchTerm,setSearchTerm,
   setShowAddColumn,  showAddColumn , setTheme,Theme,handleTheme,Themo,handleUndo ,  handleRedo
 }) {
+  const assignees = ["Alice", "Bob", "Charlie", "David", "Eva", "Frank"];
+  const [selectedAssignee, setSelectedAssignee] = useState("");
 
   useEffect(() => {
     document.body.style.backgroundColor = Theme  ? "#0f172a":"#f8fafc"  ; 
-    // document.body.style.color = Theme ? "white" : "black";
+    document.body.style.color = Theme ? "white" : "black";
   }, [Theme]);
   
 return (
@@ -27,12 +29,20 @@ return (
       </div>
 
       {/* Filter By User (Dropdown) */}
-     
-
-      {/* Add Task */}
-      <button onClick={() => setShowModal(true)} className="flex items-center  bg-green-400 gap-1 border rounded-lg px-3 py-1 text-sm">
-        <Plus size={16} /> Add New Task
-      </button>
+       {/* Assignee Selection */}
+      <select
+        value={selectedAssignee}
+       
+        onChange={(e) => {setSelectedAssignee(e.target.value) ,setSearchTerm(e.target.value)}}
+        className="border rounded-lg px-3 py-1 text-sm text-black bg-white"
+      >
+        <option value="">Select Assignee</option>
+        {assignees.map((name, index) => (
+          <option key={index} value={name}>
+            {name}
+          </option>
+        ))}
+      </select>
 
       {/* Add Column */}
       <button onClick={() => setShowAddColumn(true)} className="flex items-center bg-blue-400 gap-1 border rounded-lg px-3 py-1 text-sm">

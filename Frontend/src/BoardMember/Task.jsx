@@ -4,7 +4,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { Edit, Trash2, User, Calendar } from "lucide-react";
 import { CSS } from '@dnd-kit/utilities';
 
-function Task({ task, handleDelete, onEdit }) {
+function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: task.id });
 
@@ -30,11 +30,10 @@ function Task({ task, handleDelete, onEdit }) {
         transform: CSS.Translate.toString(transform), 
         touchAction: 'none', // ✅ important for mobile drag
       }}
-      className="w-full p-3 border rounded-xl shadow-sm mb-3 bg-white cursor-pointer 
-                 hover:shadow-md transition flex flex-col select-none"
+      className="touch-none p-4 bg-white rounded-sm shadow mb-4 hover:shadow-md h-40 hover:scale-105 transition-all duration-300"
     >
       {/* Title + Actions */}
-      <div className="flex justify-between items-start mb-2">
+      <div className="flex justify-between items-start mb-4">
         <h3 className="font-semibold text-sm text-gray-900">{task.title}</h3>
         <div className="flex gap-2">
           <button
@@ -54,7 +53,9 @@ function Task({ task, handleDelete, onEdit }) {
             onMouseDown={stopDragStart}
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(task.id);
+              setTaskToDelete(task)
+              setShowDelete(true)
+             
             }}
             className="p-1 rounded hover:bg-red-100 transition"
           >

@@ -21,7 +21,7 @@ function Column({ id, title, children }) {
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col border bg-white rounded-xl shadow-md min-h-[500px] overflow-hidden"
+      className="flex flex-col   hover:shadow-xl hover:scale-[0.97] transition-all duration-300  bg-white rounded-xl shadow-md min-h-[500px] overflow-hidden"
     >
       {/* Column header */}
       <div

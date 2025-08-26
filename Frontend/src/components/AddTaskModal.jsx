@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-import Column from "../BoardMember/Colum";
 
 export default function AddTaskModal({ onClose, onAddTask, modalType }) {
   const [title, setTitle] = useState("");
@@ -7,6 +7,9 @@ export default function AddTaskModal({ onClose, onAddTask, modalType }) {
   const [AssignName, SetAssignName] = useState("");
   const [dueDate, setDueDate] = useState("");
   const columnValue = modalType;
+
+  // Predefined assignees
+  const assignees = ["Alice", "Bob", "Charlie", "David", "Eva", "Frank"];
 
   const handleSubmit = () => {
     if (!title.trim()) return alert("Please enter a title");
@@ -16,15 +19,14 @@ export default function AddTaskModal({ onClose, onAddTask, modalType }) {
       description,
       AssignName,
       dueDate,
-     
       column: (columnValue || "todo").toLowerCase().replace(" ", "-"),
-    }; // normalize, feature, dueDate, checklist };
+    };
     onAddTask(newTask);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-30 text-black flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <h2 className="text-lg font-semibold mb-4">Add New Task</h2>
 
@@ -50,23 +52,28 @@ export default function AddTaskModal({ onClose, onAddTask, modalType }) {
             className="w-full border rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
           />
         </div>
+
+        {/* Assignee Selector */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium mb-1 text-gray-700">
             Assign To
           </label>
-          <input
-            type="text"
+          <select
             value={AssignName}
             onChange={(e) => SetAssignName(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-            placeholder="Enter candidate name"
-          />
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="">Select Assignee</option>
+            {assignees.map((name, index) => (
+              <option key={index} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Column Selector */}
         <input type="hidden" value={columnValue || ""} readOnly />
-
-        {/* Feature Selector */}
 
         {/* Due Date */}
         <div className="mb-3">

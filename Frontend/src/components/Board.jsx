@@ -13,6 +13,8 @@ function Board({
   setSearchTerm,
   searchTerm,
   columns,
+  setShowDelete,
+  setTaskToDelete
 }) {
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -41,7 +43,7 @@ function Board({
   return (
     <DndContext onDragEnd={handleDragEnd}>
       {/* ✅ Centered Scrollable Container */}
-      <div className="mt-6 flex  ">
+      <div className="mt-6 flex  mb-2 ">
         <div className="flex gap-4 overflow-x-auto  max-w-7xl ">
           {columns.map((col) => (
             <div key={col.id} className="w-85  flex-shrink-0">
@@ -49,6 +51,8 @@ function Board({
                 {getTasksByColumn(col.id).map((task) => (
                   <Task
                     onEdit={onEdit}
+                    setShowDelete = {setShowDelete}
+                    setTaskToDelete= {setTaskToDelete}
                     handleDelete={handleDelete}
                     key={task.id}
                     id={task.id}
