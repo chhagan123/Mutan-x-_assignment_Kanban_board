@@ -2,6 +2,7 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { Edit, Trash2, User, Calendar } from "lucide-react";
+import { CSS } from '@dnd-kit/utilities';
 
 function Task({ task, handleDelete, onEdit }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -22,9 +23,13 @@ function Task({ task, handleDelete, onEdit }) {
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      // style={style}
       {...listeners}
       {...attributes}
+      style={{
+        transform: CSS.Translate.toString(transform), 
+        touchAction: 'none', // ✅ important for mobile drag
+      }}
       className="w-full p-3 border rounded-xl shadow-sm mb-3 bg-white cursor-pointer 
                  hover:shadow-md transition flex flex-col select-none"
     >

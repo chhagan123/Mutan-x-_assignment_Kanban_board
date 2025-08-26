@@ -64,7 +64,7 @@ function Board({
                   }}
                   className="w-full mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
                 >
-                  + Add {col.title}
+                  + Add Todo
                 </button>
               </Column>
             </div>
