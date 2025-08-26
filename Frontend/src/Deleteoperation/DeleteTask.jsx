@@ -1,7 +1,7 @@
 
 import React from "react";
 
-export const DeleteTaskModal = ({ onDelete, onCancel, task }) => {
+export const DeleteTask = ({ onDelete, onCancel, task }) => {
   if (!task) return null; // ✅ prevent error if somehow undefined
 
   return (

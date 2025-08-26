@@ -79,7 +79,7 @@ export default function Toolbar({
               : "bg-white text-black border border-gray-300 hover:border-gray-400"}
           `}
         >
-          <option value="">Select Assignee</option>
+          <option value="">Search Assignee</option>
           {assignees.map((name, index) => (
             <option key={index} value={name}>
               {name}

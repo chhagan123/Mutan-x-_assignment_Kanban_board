@@ -5,10 +5,10 @@ import "./index.css";
 
 import Board from "./components/Board";
 import Toolbar from "./components/ToolBar";
-import AddTaskModal from "./components/AddTaskModal";
-import EditTaskModal from "./components/EditTaskModal";
-import { AddColumn } from "./components/AddColumn";
-import { DeleteTaskModal } from "./components/DeleteTask";
+import AddTaskModal from "./TaskModel/AddTaskModal";
+import EditTaskModal from "./TaskModel/EditTaskModal";
+import { AddColumn } from "./TaskModel/AddColumn";
+import { DeleteTask } from "./Deleteoperation/DeleteTask";
 
 function App() {
   const [modalType, setModalType] = useState(null);
@@ -189,7 +189,7 @@ function App() {
         />
       )}
      {showDelete && taskToDelete && (
-  <DeleteTaskModal
+  <DeleteTask
     task={taskToDelete} // 👈 pass single task, not array
     onDelete={(id) => {
       handleDelete(id);

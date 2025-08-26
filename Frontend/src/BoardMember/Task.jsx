@@ -1,19 +1,18 @@
-
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { Edit, Trash2, User, Calendar } from "lucide-react";
-import { CSS } from '@dnd-kit/utilities';
+import { CSS } from "@dnd-kit/utilities";
 
-function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
+function Task({
+  task,
+  handleDelete,
+  onEdit,
+  setShowDelete,
+  setTaskToDelete,
+  Theme,
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: task.id });
-
-  const style = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
-    opacity: isDragging ? 0.5 : 1,
-  };
 
   const stopDragStart = (e) => {
     e.preventDefault();
@@ -23,18 +22,26 @@ function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
   return (
     <div
       ref={setNodeRef}
-      // style={style}
       {...listeners}
       {...attributes}
       style={{
-        transform: CSS.Translate.toString(transform), 
-        touchAction: 'none', // ✅ important for mobile drag
+        transform: CSS.Translate.toString(transform),
+        touchAction: "none",
+        opacity: isDragging ? 0.5 : 1,
       }}
-      className="touch-none p-4 bg-white rounded-sm shadow mb-4 hover:shadow-md h-40 hover:scale-105 transition-all duration-300"
+      className={`
+        touch-none p-4 rounded-sm ${
+          Theme
+            ? "bg-gray-800 text-white border w-auto  border-purple-500 shadow-md shadow-purple/50" // Dark mode
+            : "bg-gray  text-gray-900 border border-gray-300 shadow-md shadow-gray-400"
+        } // Light mode
+ mb-4  h-40 transition-all duration-300
+        ${Theme ? "bg-gray-800 text-white" : "bg-white text-gray-900"}
+      `}
     >
       {/* Title + Actions */}
       <div className="flex justify-between items-start mb-4">
-        <h3 className="font-semibold text-sm text-gray-900">{task.title}</h3>
+        <h3 className="font-semibold text-sm">{task.title}</h3>
         <div className="flex gap-2">
           <button
             onPointerDown={stopDragStart}
@@ -43,9 +50,14 @@ function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
               e.stopPropagation();
               onEdit(task);
             }}
-            className="p-1 rounded hover:bg-indigo-100 transition"
+            className={`p-1 rounded transition ${
+              Theme ? "hover:bg-gray-700" : "hover:bg-indigo-100"
+            }`}
           >
-            <Edit size={16} className="text-indigo-600" />
+            <Edit
+              size={16}
+              className={Theme ? "text-indigo-400" : "text-indigo-600"}
+            />
           </button>
 
           <button
@@ -53,35 +65,49 @@ function Task({ task, handleDelete, onEdit ,setShowDelete,setTaskToDelete}) {
             onMouseDown={stopDragStart}
             onClick={(e) => {
               e.stopPropagation();
-              setTaskToDelete(task)
-              setShowDelete(true)
-             
+              setTaskToDelete(task);
+              setShowDelete(true);
             }}
-            className="p-1 "
+            className={`p-1 rounded transition ${
+              Theme ? "hover:bg-red-700" : "hover:bg-red-100"
+            }`}
           >
-            <Trash2 size={16} className="text-red-500" />
+            <Trash2
+              size={16}
+              className={Theme ? "text-red-400" : "text-red-500"}
+            />
           </button>
         </div>
       </div>
 
       {/* Description */}
       {task.description && (
-        <p className="text-xs text-gray-600 mb-2">{task.description}</p>
+        <p
+          className={`${
+            Theme ? "text-gray-300" : "text-gray-600"
+          } text-xs mb-2`}
+        >
+          {task.description}
+        </p>
       )}
 
       {/* Divider */}
-      <hr className="my-2" />
+      <hr className={Theme ? "border-gray-700 my-2" : "border-gray-200 my-2"} />
 
       {/* Footer (Assignee + Date) */}
-      <div className="flex justify-between items-center text-xs text-gray-600">
+      <div
+        className={`flex justify-between items-center text-xs ${
+          Theme ? "text-gray-300" : "text-gray-600"
+        }`}
+      >
         {task.AssignName && (
-          <span className="flex items-center gap-1 text-gray-700">
+          <span className="flex items-center gap-1">
             <User size={12} /> {task.AssignName}
           </span>
         )}
 
         {task.dueDate && (
-          <span className="flex items-center gap-1 text-gray-500">
+          <span className="flex items-center gap-1">
             <Calendar size={12} /> {task.dueDate}
           </span>
         )}

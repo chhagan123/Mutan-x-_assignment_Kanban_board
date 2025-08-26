@@ -15,7 +15,9 @@ function Board({
   columns,
   setShowDelete,
   setTaskToDelete,
-  Theme
+  Theme,
+  setcolid,
+  onDelete
 }) {
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -48,7 +50,7 @@ function Board({
         <div className="flex gap-4 overflow-x-auto  w-full ">
           {columns.map((col) => (
             <div key={col.id} className="w-84 h-120  flex-shrink-0">
-              <Column id={col.id} Theme={Theme} title={col.title}>
+              <Column id={col.id} Theme={Theme} columns={columns}  title={col.title}>
                 {getTasksByColumn(col.id).map((task) => (
                   <Task
                     onEdit={onEdit}
@@ -58,6 +60,7 @@ function Board({
                     key={task.id}
                     id={task.id}
                     task={task}
+                    Theme={Theme}
                   />
                 ))}
 
@@ -69,7 +72,7 @@ function Board({
                   }}
                   className="w-10xl mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
                 >
-                  + Add Todo
+                  + Add New Task
                 </button>
               </Column>
             </div>
