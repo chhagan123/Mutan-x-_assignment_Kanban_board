@@ -1,6 +1,6 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { Edit, Trash2, User, Calendar } from "lucide-react"; // ✅ icon set
+import { Edit, Trash2, User, Calendar, } from "lucide-react"; // ✅ icon set
 
 function Task({ id, task ,handleDelete,onEdit}) {
   // const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -15,7 +15,12 @@ function Task({ id, task ,handleDelete,onEdit}) {
       : undefined,
     opacity: isDragging ? 0.5 : 1,
   };
-   
+  const stopDragStart = (e) => {
+    e.preventDefault();   // <- crucial for dnd-kit
+    e.stopPropagation();
+  };
+
+
  
   return (
     <div
@@ -28,19 +33,25 @@ function Task({ id, task ,handleDelete,onEdit}) {
     >
       {/* Top Row (Title + Actions) */}
       <div className="flex justify-between items-start">
-        <h3 className="font-semibold text-sm text-gray-800 truncate">
+
+        <h2 className="ont-semibold text-md text-black truncate">
           {task.title}
-        </h3>
+        </h2>
         <div className="flex gap-2 text-gray-500">
         <button
-  onClick={() => onEdit(task)}
+           onPointerDown={stopDragStart}
+           onMouseDown={stopDragStart}
+  onClick={(e) => { onEdit(task)}}
   className="p-1 rounded hover:bg-indigo-100 active:scale-95 transition"
 >
   <Edit size={16} className="text-indigo-600" />
 </button>
 
 <button
-  onClick={() => handleDelete(task.id)}
+  onPointerDown={stopDragStart}
+  onMouseDown={stopDragStart}
+  onClick={() => {
+    handleDelete(task.id)}}
   className="p-1 rounded hover:bg-red-100 active:scale-95 transition"
 >
   <Trash2 size={16} className="text-red-600" />
@@ -77,87 +88,4 @@ function Task({ id, task ,handleDelete,onEdit}) {
 }
 
 export default Task
-
-
-// import React from "react";
-// import { useDraggable } from "@dnd-kit/core";
-// import { Edit, Trash2, User, Calendar } from "lucide-react";
-
-// function Task({ id, task, handleDelete, onEdit }) {
-//   const { attributes, listeners, setNodeRef, transform, isDragging } =
-//     useDraggable({ id: task.id });
-
-//   // const style = {
-//   //   transform: transform
-//   //     ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-//   //     : undefined,
-//   //   opacity: isDragging ? 0.5 : 1,
-//   // };
-
-//   const style = {
-//     transform: transform
-//       ? `translate(${transform.x}px, ${transform.y}px)`
-//       : undefined,
-//     zIndex: isDragging ? 9999 : "auto", // ✅ keep it on top
-//     position: isDragging ? "absolute" : "relative", // ✅ ensures it's floating
-//     // width: "80%", // so it doesn’t shrink
-//     width:"200px",
-//     height:"150px"
-//   };
-
-
-//   return (
-//     <div
-//       ref={setNodeRef}
-//       style={style}
-//       {...listeners}
-//       {...attributes}
-//       className="w-full p-3 mb-3 border rounded-lg shadow bg-white hover:shadow-lg transition flex flex-col gap-2"
-//     >
-//       {/* Title + Actions */}
-//       <div className="flex justify-between items-start">
-//         <h3 className="font-semibold text-sm text-gray-800 truncate">
-//           {task.title}
-//         </h3>
-//         <div className="flex gap-2">
-//           <button
-//             onClick={() => onEdit(task)}
-//             className="p-1 rounded hover:bg-indigo-100 active:scale-95"
-//           >
-//             <Edit size={16} className="text-indigo-600" />
-//           </button>
-//           <button
-//             onClick={() => handleDelete(task.id)}
-           
-//             className="p-1 rounded hover:bg-red-100 active:scale-95"
-//           >
-//             <Trash2 size={16} className="text-red-600" />
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Description */}
-//       <p className="text-xs text-gray-600 line-clamp-2">{task.description}</p>
-
-//       {/* Assignee + Due Date */}
-//       <div className="flex flex-col gap-1 text-xs text-gray-700">
-//         {task.AssignName && (
-//           <span className="flex items-center gap-1">
-//             <User size={12} />
-//             {task.AssignName}
-//           </span>
-//         )}
-//         {task.dueDate && (
-//           <span className="flex items-center gap-1 text-gray-500">
-//             <Calendar size={12} />
-//             {task.dueDate}
-//           </span>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Task;
-
 
