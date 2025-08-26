@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 
-export const AddColumn = ({ onClose, onSave ,Theme}) => {
+export const AddColumn = ({ onClose, onSave ,Theme,columns}) => {
   const [title, setTitle] = useState("");
 
   const handleSave = () => {
+    const isDuplicate = columns.some(
+      (col) => col.title.toLowerCase() === title.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      alert("Column already registered Please make a new colum");
+      return;
+    }
     if (!title.trim()) return;
     onSave({ id: Date.now().toString(), title });
+    alert("colum created successfully")
     setTitle("");
     onClose();
   };

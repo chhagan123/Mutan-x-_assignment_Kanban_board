@@ -1,18 +1,20 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/core";
 
-function Column({ id, title, children, Theme }) {
+function Column({ id, title, children, Theme,onDelete }) {
   const { setNodeRef } = useDroppable({ id });
+  const defaultCols = ["todo", "in-progress", "done"];
+  const isDeletable = !defaultCols.includes(id);
 
   // Count tasks in this column (children length)
   const taskCount = React.Children.count(children);
 
   // Assign colors dynamically
   const colors = {
-    Todo: "bg-gray-500",
+    Todo: "bg-purple-500",
     "In Progress": "bg-yellow-500",
     Done: "bg-green-500",
-    cccc: "bg-blue-500",
+    cccc: "bg-purple-500",
     "new one": "bg-purple-500",
   };
 
@@ -38,6 +40,13 @@ function Column({ id, title, children, Theme }) {
                     ${colors[title] || "bg-gray-500"}`}
         >
           <h2>{title}</h2>
+          {isDeletable && (
+          <button
+            onClick={onDelete}
+            className="text-xs bg-red-500 px-2 py-1 rounded hover:bg-red-600"
+          >
+            Delete colum
+          </button>)}
           <span className="text-sm bg-white/20 px-2 py-0.5 rounded-full">
             {taskCount - 1}
           </span>

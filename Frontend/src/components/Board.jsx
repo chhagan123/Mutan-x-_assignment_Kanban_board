@@ -17,7 +17,9 @@ function Board({
   setTaskToDelete,
   Theme,
   setcolid,
-  onDelete
+  onDelete,
+  handleDeleteCol,
+  ...props
 }) {
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -50,7 +52,7 @@ function Board({
         <div className="flex gap-4 overflow-x-auto  w-full ">
           {columns.map((col) => (
             <div key={col.id} className="w-84 h-120  flex-shrink-0">
-              <Column id={col.id} Theme={Theme} columns={columns}  title={col.title}>
+              <Column id={col.id} Theme={Theme} columns={columns} onDelete={() => handleDeleteCol(col.id)}   title={col.title}>
                 {getTasksByColumn(col.id).map((task) => (
                   <Task
                     onEdit={onEdit}

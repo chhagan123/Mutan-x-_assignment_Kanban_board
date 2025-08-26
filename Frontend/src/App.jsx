@@ -118,6 +118,19 @@ function App() {
     updateBoardState(tasks, [...columns, newColumn]);
   };
 
+  // --- Column Delete Function ---
+const handleDeleteCol = (colId) => {
+  const defaultCols = ["todo", "in-progress", "done"]; // protected columns
+  if (defaultCols.includes(colId)) return; // don't delete default ones
+
+  // Filter out column and its tasks
+  const newColumns = columns.filter((col) => col.id !== colId);
+  const newTasks = tasks.filter((task) => task.column !== colId);
+
+  updateBoardState(newTasks, newColumns); // update state with history
+};
+
+
   return (
     <div className="h-full w-full flex flex-col 
     md:pl-20 md:pr-20 md:mt-10 md:mb-10">
@@ -167,6 +180,9 @@ function App() {
         setShowDelete={setShowDelete}
         setTaskToDelete={setTaskToDelete}
         Theme={Theme}
+        
+        
+        handleDeleteCol={handleDeleteCol}
       />
 
       {/* Add Task Modal */}
@@ -206,6 +222,7 @@ function App() {
       {/* Add Column Modal */}
       {showAddColumn && (
         <AddColumn
+          columns = {columns}
           onClose={() => setShowAddColumn(false)}
           onSave={(col) => {
             addColumn(col);
