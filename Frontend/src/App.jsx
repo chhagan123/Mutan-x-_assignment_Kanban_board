@@ -165,12 +165,14 @@ function App() {
         setShowAddColumn={showAddColumn}
         setShowDelete={setShowDelete}
         setTaskToDelete={setTaskToDelete}
+        Theme={Theme}
       />
 
       {/* Add Task Modal */}
       {showModal && (
         <AddTaskModal
           modalType={modalType}
+          Theme={Theme}
           onClose={() => setShowModal(false)}
           onAddTask={handleAddTask}
         />
