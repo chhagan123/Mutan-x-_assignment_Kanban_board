@@ -56,6 +56,7 @@ export default function AddTaskModal({ onClose, onAddTask, modalType, Theme }) {
           <input
             type="text"
             value={title}
+            required
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter task title"
             className={`w-full border rounded-md p-2 focus:ring-2 transition-all duration-200

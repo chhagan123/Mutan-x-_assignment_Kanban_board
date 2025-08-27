@@ -119,17 +119,21 @@ function App() {
   };
 
   // --- Column Delete Function ---
-const handleDeleteCol = (colId) => {
-  const defaultCols = ["todo", "in-progress", "done"]; // protected columns
-  if (defaultCols.includes(colId)) return; // don't delete default ones
-
-  // Filter out column and its tasks
-  const newColumns = columns.filter((col) => col.id !== colId);
-  const newTasks = tasks.filter((task) => task.column !== colId);
-
-  updateBoardState(newTasks, newColumns); // update state with history
-};
-
+  const handleDeleteCol = (colId) => {
+    const defaultCols = ["todo", "in-progress", "done"]; // protected columns
+    if (defaultCols.includes(colId)) return; // don't delete default ones
+  
+    // Ask for confirmation before deleting
+    if (!window.confirm("Are you sure you want to delete this column?")) {
+      return; // Stop if user cancels
+    }
+  
+    const newColumns = columns.filter((col) => col.id !== colId);
+    const newTasks = tasks.filter((task) => task.column !== colId);
+  
+    updateBoardState(newTasks, newColumns); // update state with history
+  };
+  
 
   return (
     <div className="h-full w-full flex flex-col 
