@@ -51,7 +51,7 @@ function Board({
       <div className="mt-6 flex  mb-2 ">
         <div className="flex gap-4 overflow-x-auto  w-full ">
           {columns.map((col) => (
-            <div key={col.id} className="w-84 h-120  flex-shrink-0">
+            <div key={col.id} className="w-84 h-127  flex-shrink-0">
               <Column id={col.id} Theme={Theme} columns={columns} onDelete={() => handleDeleteCol(col.id)}   title={col.title}>
                 {getTasksByColumn(col.id).map((task) => (
                   <Task
