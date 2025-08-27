@@ -72,7 +72,9 @@ export default function AddTaskModal({ onClose, onAddTask, modalType, Theme }) {
           <label className="block text-sm font-medium mb-1">Description</label>
           <textarea
             value={description}
+            required
             onChange={(e) => setDescription(e.target.value)}
+          
             placeholder="Enter task description"
             className={`w-full border rounded-md p-2 focus:ring-2 transition-all duration-200
               ${Theme
