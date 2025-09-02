@@ -31,7 +31,7 @@ function Column({ id, title, children, Theme,onDelete }) {
                  }
               
                  rounded-xl shadow-md 
-                 min-h-auto w-auto flex-shrink-0`} // 👈 fixed width for slider
+             sm:min-h-[400px] min-h-[250px] w-auto flex-shrink-0`} // 👈 fixed width for slider
       >
         {/* Column header */}
         <div

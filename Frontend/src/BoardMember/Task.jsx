@@ -58,10 +58,12 @@ function Task({
     zIndex: isDragging ? 9999 : "auto",
     width:
     window.innerWidth <= 1024
-      ? "90%" // mobile & tablet → always full width
+      ? isDragging
+        ? "70%" // mobile/tablet drag
+        : "100%" // mobile/tablet normal
       : isDragging
-      ? task.width || "20.5%" // desktop drag → custom width
-      : "100%", // desktop normal → full width
+      ? task.width || "20.5%" // desktop drag
+      : "100%", // desktop normal
   
      
     position: isDragging ? "fixed" : "relative",

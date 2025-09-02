@@ -40,7 +40,8 @@ function App() {
     { id: "todo", title: "Todo" },
     { id: "in-progress", title: "In Progress" },
     { id: "done", title: "Done" },
-    { id: "newcolumn", title: "New Column" }
+    // just add new column
+    // { id: "newcolumn", title: "New Column" }
   ];
 
   const [columns, setColumns] = useState(() => {
