@@ -3,6 +3,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { Edit, Trash2, User, Calendar, FileX } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { useState,useRef } from "react";
+import { formatDistanceToNow } from "date-fns";         
 
 function Task({
   task,
@@ -158,7 +159,7 @@ function Task({
 {task.dueDate && (
   <span className="flex items-center gap-1">
     <Calendar size={12} />
-    {task.dueDate}
+    { formatDistanceToNow (new Date(task.dueDate), { addSuffix: true })}
   </span>
 )}
 

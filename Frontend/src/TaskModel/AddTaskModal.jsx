@@ -8,7 +8,14 @@ export default function AddTaskModal({ onClose, onAddTask, modalType, Theme }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [AssignName, SetAssignName] = useState("");
-  const [dueDate, setDueDate] = useState(" ");
+  const [dueDate, setDueDate] = useState( () => {
+  //  format: YYYY-MM-DDTHH:mm → works for datetime-local input
+    const now = new Date();
+    return new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 16);
+  
+  });
   const columnValue = modalType;
 
   const assignees = ["Alice", "Bob", "Charlie", "David", "Eva", "Frank"];
