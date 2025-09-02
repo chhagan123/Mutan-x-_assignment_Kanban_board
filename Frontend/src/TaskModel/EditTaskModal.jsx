@@ -106,7 +106,7 @@ function EditTaskModal({ task, onSave, onClose, Theme }) {
             {/* Due Date */}
             <label className="block text-sm font-medium mb-1">Due Date</label>
             <input
-              type="date"
+            type="datetime-local"
               className={`border w-full p-2 rounded mb-4
                 ${Theme ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300 text-black"}
               `}
@@ -142,3 +142,5 @@ function EditTaskModal({ task, onSave, onClose, Theme }) {
 }
 
 export default EditTaskModal;
+
+
