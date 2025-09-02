@@ -149,13 +149,12 @@ function App() {
     md:pl-20 md:pr-20 md:mt-10 md:mb-10">
       {/* Title */}
       <h1
-        className={`${
-          Theme ? "text-white" : "text-black"
-        } text-2xl mb-6 font-bold`}
-      >
-        Welcome To Kanban Board
-      </h1>
-
+    className={`text-center mt-3 ${
+      Theme ? "text-white" : "text-black"
+    } text-2xl mb-6 font-bold`}
+  >
+    Welcome To Kanban Board
+  </h1>
      
 
       {/* Toolbar */}

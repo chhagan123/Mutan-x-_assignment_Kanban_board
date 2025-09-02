@@ -48,8 +48,7 @@ function Task({
     e.preventDefault();
     e.stopPropagation();
   };
-
- 
+  
   const style = {
     
     transform: CSS.Translate.toString(transform),
@@ -69,6 +68,8 @@ function Task({
     position: isDragging ? "fixed" : "relative",
     cursor: "pointer", // ✅ show pointer to indicate click
   };
+
+  
 
   return (
     <div

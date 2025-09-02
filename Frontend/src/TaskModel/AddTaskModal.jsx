@@ -121,8 +121,9 @@ export default function AddTaskModal({ onClose, onAddTask, modalType, Theme }) {
         <div className="mb-3">
           <label className="block text-sm font-medium mb-1">Due Date</label>
           <input
-            type="date"
-            value={dueDate}
+         type="datetime-local"
+         value={dueDate}
+           
             onChange={(e) => setDueDate(e.target.value)}
             className={`w-full border rounded-md p-2 focus:ring-2 transition-all duration-200
               ${Theme

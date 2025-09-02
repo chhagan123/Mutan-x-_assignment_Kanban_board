@@ -32,8 +32,7 @@ export default function Toolbar({
   return (
     <div
       className={`
-         w-auto flex flex-col md:flex-row md:items-center md:justify-between 
-          gap-4 p-3 rounded-xl shadow-md transition-all duration-300
+         flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-3 rounded-xl shadow-md transition-all duration-300 m-2 md:mr-20
         ${Theme 
           ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-purple-500/40" 
           : "bg-white border border-gray-300"}
