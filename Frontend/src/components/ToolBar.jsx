@@ -32,19 +32,19 @@ export default function Toolbar({
   return (
     <div
       className={`
-        w-auto flex items-start  flex-wrap  justify-between  gap-10 p-3 rounded-xl shadow-md 
-        transition-all duration-300
+         w-auto flex flex-col md:flex-row md:items-center md:justify-between 
+          gap-4 p-3 rounded-xl shadow-md transition-all duration-300
         ${Theme 
           ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-purple-500/40" 
           : "bg-white border border-gray-300"}
       `}
     >
       {/* Left Section: Search + Filter */}
-      <div className="flex flex-wrap gap-3 w-full md:w-auto">
+      <div className="flex  gap-3 w-full md:w-auto">
         {/* Search */}
         <div
           className={`
-            flex items-center rounded-lg px-2 w-full sm:w-64 transition-all duration-300
+        flex items-center rounded-lg px-2 flex-1 transition-all duration-300
             ${Theme 
               ? "bg-gray-800 border border-purple-500/40 text-white" 
               : "bg-white border border-gray-300 text-black"}

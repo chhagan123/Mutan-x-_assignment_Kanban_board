@@ -35,15 +35,21 @@ function App() {
   });
 
   // --- Columns ---
+
+  const defaultColumns = [
+    { id: "todo", title: "Todo" },
+    { id: "in-progress", title: "In Progress" },
+    { id: "done", title: "Done" },
+    { id: "newcolumn", title: "New Column" }
+  ];
+
   const [columns, setColumns] = useState(() => {
     const saved = localStorage.getItem("columns");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          { id: "todo", title: "Todo" },
-          { id: "in-progress", title: "In Progress" },
-          { id: "done", title: "Done" },
-        ];
+    if(saved) {
+      const parsed = JSON.parse(saved)
+      return parsed.length>0 ? parsed:defaultColumns
+    }
+    return defaultColumns
   });
 
   // Persist tasks
@@ -98,10 +104,12 @@ function App() {
 
   const handleDelete = (id) => {
     console.log("nothing");
-    updateBoardState(
-      tasks.filter((task) => task.id !== id),
-      columns
-    );
+    // updateBoardState(
+    //   tasks.filter((task) => task.id !== id),
+    //   columns
+    // );
+    const newone = tasks.filter((task) => task.id !== id)
+    setTasks(newone)
   };
  
 

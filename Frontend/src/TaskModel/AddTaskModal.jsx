@@ -1,17 +1,19 @@
 
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function AddTaskModal({ onClose, onAddTask, modalType, Theme }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [AssignName, SetAssignName] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState(" ");
   const columnValue = modalType;
 
   const assignees = ["Alice", "Bob", "Charlie", "David", "Eva", "Frank"];
+
+  
 
   const handleSubmit = () => {
     if (!title.trim()) return alert("Please enter a title");

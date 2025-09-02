@@ -32,6 +32,10 @@ function Board({
     );
   };
 
+  function handleDragStart(event) {
+    setActiveId(event.active.id);
+  }
+
   const [activeTask, setActiveTask] = React.useState(null);
 
   const getTasksByColumn = (col) =>
@@ -46,15 +50,20 @@ function Board({
       .filter((t) => t.column === col);
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} >
       {/* ✅ Centered Scrollable Container */}
-      <div className="mt-6 flex  mb-2 ">
-        <div className="flex gap-4 overflow-x-auto  w-full ">
+      <div className="mt-6 flex mb-2 ">
+        <div className="flex gap-4 w-full  h-auto overflow-x-hidden  lg:overflow-y-hidden 
+      overflow-y-auto lg:overflow-x-auto   
+      flex-col lg:flex-row    items-center lg:items-start  scroll-hidden">
+      
+       
           {columns.map((col) => (
-            <div key={col.id} className="w-84 h-127  flex-shrink-0">
+            <div key={col.id} className="w-84 h-auto  flex-shrink-0">
               <Column id={col.id} Theme={Theme} columns={columns} onDelete={() => handleDeleteCol(col.id)}   title={col.title}>
                 {getTasksByColumn(col.id).map((task) => (
                   <Task
+                  onClick={() => onEdit(task)} 
                     onEdit={onEdit}
                     setShowDelete = {setShowDelete}
                     setTaskToDelete= {setTaskToDelete}
@@ -86,3 +95,5 @@ function Board({
 }
 
 export default Board;
+
+

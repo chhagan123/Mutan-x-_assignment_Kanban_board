@@ -1,7 +1,8 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { Edit, Trash2, User, Calendar } from "lucide-react";
+import { Edit, Trash2, User, Calendar, FileX } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
+import { useState,useRef } from "react";
 
 function Task({
   task,
@@ -10,32 +11,80 @@ function Task({
   setShowDelete,
   setTaskToDelete,
   Theme,
+  // isDragging = false
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: task.id });
 
+    const [clickTimeout, setClickTimeout] = useState(null);
+  const isDraggingRef = useRef(false);
+
+  
+
+  
+  
+    const handleMouseDown = () => {
+      isDraggingRef.current = false;
+
+     // If user keeps holding, we allow drag
+      const timeout = setTimeout(() => {
+        isDraggingRef.current = true;
+      }, 400); // 300ms threshold between click & drag
+  
+      setClickTimeout(timeout);
+      
+    };
+
+    const handleMouseUp = () => {
+      clearTimeout(clickTimeout);
+  
+      // If it was a click (not drag), open edit
+      if (!isDraggingRef.current) {
+        onEdit(task);
+      }
+    };
   const stopDragStart = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
+ 
+  const style = {
+    
+    transform: CSS.Translate.toString(transform),
+    transition: isDragging ? "none" : "transform 500ms ease",
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 9999 : "auto",
+    width:
+    window.innerWidth <= 1024
+      ? "90%" // mobile & tablet → always full width
+      : isDragging
+      ? task.width || "20.5%" // desktop drag → custom width
+      : "100%", // desktop normal → full width
+  
+     
+    position: isDragging ? "fixed" : "relative",
+    cursor: "pointer", // ✅ show pointer to indicate click
+  };
+
   return (
     <div
       ref={setNodeRef}
+      style={style}
       {...listeners}
       {...attributes}
-      style={{
-        transform: CSS.Translate.toString(transform),
-        touchAction: "none",
-        opacity: isDragging ? 0.5 : 1,
-      }}
+      // onClick={() => onEdit(task)}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+
+     
       className={`
         touch-none p-4 rounded-sm ${
           Theme
             ? "bg-gray-800 text-white border w-auto  border-purple-500 shadow-md shadow-purple/50" // Dark mode
             : "bg-gray  text-gray-900 border border-gray-300 shadow-md shadow-gray-400"
         } // Light mode
- mb-4  h-40 transition-all duration-300
+ mb-4  h-auto transition-all duration-300
         ${Theme ? "bg-gray-800 text-white" : "bg-white text-gray-900"}
       `}
     >
@@ -106,14 +155,21 @@ function Task({
           </span>
         )}
 
-        {task.dueDate && (
-          <span className="flex items-center gap-1">
-            <Calendar size={12} /> {task.dueDate}
-          </span>
-        )}
+{task.dueDate && (
+  <span className="flex items-center gap-1">
+    <Calendar size={12} />
+    {task.dueDate}
+  </span>
+)}
+
       </div>
     </div>
   );
 }
 
+
+
 export default Task;
+
+
+
